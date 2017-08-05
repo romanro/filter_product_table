@@ -1,0 +1,1 @@
+http://getinstance.info/dictionary/reactjs/thinking-in-react/
