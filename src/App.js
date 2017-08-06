@@ -8,12 +8,30 @@ import ProductsTable from './comp/ProductsTable';
 import './styles/app.css';
 
 class App extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { searchString: '', showOnlyInStock: false };
+  }
+
   static propTypes = {
     products: PropTypes.array.isRequired,
   }
 
   static defaultProps = {
     products: []
+  }
+
+  handleSearchStringChange = (searchString) => {
+    this.setState({
+      searchString: searchString
+    })
+  }
+
+  handleOnlyInStockChange = (inStock) => {
+    this.setState({
+      showOnlyInStock: inStock
+    })
   }
 
 
@@ -23,12 +41,21 @@ class App extends Component {
         <Container>
           <Row>
             <Col sm={5}>
-              <SearchBar />
+              <SearchBar
+                searchString={this.state.searchString}
+                showOnlyInStock={this.state.showOnlyInStock}
+                handleSearchStringChange={this.handleSearchStringChange}
+                handleOnlyInStockChange={this.handleOnlyInStockChange}
+              />
             </Col>
           </Row>
           <Row>
             <Col>
-              <ProductsTable products={this.props.products} />
+              <ProductsTable
+                searchString={this.state.searchString}
+                showOnlyInStock={this.state.showOnlyInStock}
+                products={this.props.products}
+              />
             </Col>
           </Row>
         </Container>

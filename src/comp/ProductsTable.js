@@ -11,10 +11,14 @@ class ProductsTable extends Component {
 
     static propTypes = {
         products: PropTypes.array.isRequired,
+        searchString: PropTypes.string.isRequired,
+        showOnlyInStock: PropTypes.boolean
     }
 
     static defaultProps = {
-        products: []
+        products: [],
+        searchString: '',
+        showOnlyInStock: false
     }
 
 
@@ -23,11 +27,19 @@ class ProductsTable extends Component {
         var rows = [];
         var lastCategory = null;
 
+        var lowercaseSearchString = this.props.searchString.toLowerCase();
+
         this.props.products.forEach(function (product) {
-            if (product.category !== lastCategory) {
-                rows.push(<ProductsCategoryRow categoryName={product.category} key={product.category}/>);
+
+            var lcProductName = product.name.toLowerCase();
+
+            if (lcProductName.indexOf(lowercaseSearchString) === -1 || (!product.stocked && this.props.showOnlyInStock)) {
+                return;
             }
-            rows.push(<ProductRow product={product} key={product.name}/>);
+            if (product.category !== lastCategory) {
+                rows.push(<ProductsCategoryRow categoryName={product.category} key={product.category} />);
+            }
+            rows.push(<ProductRow product={product} key={product.name} />);
             lastCategory = product.category;
 
         }, this);
